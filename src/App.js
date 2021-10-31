@@ -1,5 +1,6 @@
 import React from 'react';
 import CardEditor from './CardEditor';
+import CardViewer from './CardViewer';
 
 class App extends React.Component {
 	constructor(props) {
@@ -9,10 +10,39 @@ class App extends React.Component {
 				{ front: 'front1', back: 'back1' },
 				{ front: 'front2', back: 'back2' },
 			],
+			editor: true,
 		};
 	}
+
+	addCard = (card) => {
+		const cards = this.state.cards.slice().concat(card);
+		this.setState({ cards });
+	};
+
+	deleteCard = (index) => {
+		const cards = this.state.cards.slice();
+		cards.splice(index, 1);
+		this.setState({ cards: cards });
+	};
+
+	switchMode = () => {
+		this.setState({ editor: !this.state.editor });
+		console.log('Editor state changed');
+	};
+
 	render() {
-		return <CardEditor cards = {this.state.cards}/>;
+		if (this.state.editor) {
+			return (
+				<CardEditor
+					addCard={this.addCard}
+					deleteCard={this.deleteCard}
+					cards={this.state.cards}
+					switchMode={this.switchMode}
+				/>
+			);
+		} else {
+			return <CardViewer switchMode={this.switchMode} />;
+		}
 	}
 }
 export default App;

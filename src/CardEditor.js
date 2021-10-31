@@ -5,11 +5,16 @@ class CardEditor extends React.Component {
 		super(props);
 		this.state = { front: '', back: '' };
 	}
-
+	addCard = () => {
+		this.props.addCard(this.state);
+		this.setState({ front: '', back: '' });
+	};
 	handleChange = (event) => {
 		this.setState({ [event.target.name]: event.target.value });
 	};
-
+	deleteCard = (index) => {
+		this.props.deleteCard(index);
+	};
 	render() {
 		const cards = this.props.cards.map((card, index) => {
 			return (
@@ -17,7 +22,7 @@ class CardEditor extends React.Component {
 					<td>{card.front}</td>
 					<td>{card.back}</td>
 					<td>
-						<button>Delete card</button>
+						<button onClick={() => this.deleteCard(index)}>Delete card</button>
 					</td>
 				</tr>
 			);
@@ -48,7 +53,11 @@ class CardEditor extends React.Component {
 					placeholder='Back of card'
 					value={this.state.back}
 				/>
-				<button>Add card</button>
+				<button onClick={this.addCard}>Add card</button>
+				<hr />
+				<button onClick={this.props.switchMode}>
+					Switch mode to view the cards
+				</button>
 			</div>
 		);
 	}
