@@ -1,0 +1,12 @@
+.card {
+    border: 3px solid lightcyan;
+    background-color: blanchedalmond;
+    width: fit-content;
+    min-width: 200px;
+    text-align: center;
+    padding: 50px;
+  }
+  
+  .card:hover {
+    cursor: pointer;
+  }

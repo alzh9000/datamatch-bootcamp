@@ -6,6 +6,10 @@ class CardEditor extends React.Component {
 		this.state = { front: '', back: '' };
 	}
 	addCard = () => {
+		if (!this.state.front.trim() || !this.state.back.trim()) {
+			alert('We disallow cards with empty fronts or empty backs.');
+			return;
+		}
 		this.props.addCard(this.state);
 		this.setState({ front: '', back: '' });
 	};
@@ -55,8 +59,11 @@ class CardEditor extends React.Component {
 				/>
 				<button onClick={this.addCard}>Add card</button>
 				<hr />
-				<button onClick={this.props.switchMode}>
-					Switch mode to view the cards
+				<button
+					onClick={this.props.switchMode}
+					disabled={!this.props.cards.length}
+				>
+					Switch mode to view the cards, if there is at least one card
 				</button>
 			</div>
 		);
