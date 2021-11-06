@@ -1,4 +1,6 @@
 import React from 'react';
+import './CardViewer.css';
+import { Link } from 'react-router-dom';
 
 class CardEditor extends React.Component {
 	constructor(props) {
@@ -59,12 +61,7 @@ class CardEditor extends React.Component {
 				/>
 				<button onClick={this.addCard}>Add card</button>
 				<hr />
-				<button
-					onClick={this.props.switchMode}
-					disabled={!this.props.cards.length}
-				>
-					Switch mode to view the cards, if there is at least one card
-				</button>
+				<Link to='/viewer'>Switch mode to view the cards</Link>
 			</div>
 		);
 	}
