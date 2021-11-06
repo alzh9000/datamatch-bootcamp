@@ -1,0 +1,30 @@
+{
+  "decks" : {
+    "deck1" : {
+      "cards" : [ {
+        "back" : "Occurs when the model is too complex",
+        "front" : "Overfitting"
+      }, {
+        "back" : "Occurs when the model is too simple",
+        "front" : "Underfitting"
+      }, {
+        "back" : "A simple machine learning method",
+        "front" : "Linear Regression"
+      } ],
+      "name" : "Data Science"
+    },
+    "deck2" : {
+      "cards" : [ {
+        "back" : "Manages permissions for processes",
+        "front" : "Kernel"
+      }, {
+        "back" : "A set of very low level programming languages that can be converted into machine code",
+        "front" : "Assembly"
+      }, {
+        "back" : "The second problem set, which tested our assembly skills",
+        "front" : "Bomb Pset"
+      } ],
+      "name" : "Systems"
+    }
+  }
+}
