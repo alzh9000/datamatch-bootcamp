@@ -64,7 +64,7 @@ class CardViewer extends React.Component {
 					Previous Card
 				</button>
 				<hr />
-				<Link to='/editor'>Go to Home</Link>
+				<Link to='/'>Go to Home</Link>
 			</div>
 		);
 	}
