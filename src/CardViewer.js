@@ -1,5 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { firebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import './CardViewer.css';
 
 class CardViewer extends React.Component {
@@ -30,13 +33,21 @@ class CardViewer extends React.Component {
 		this.setState({ showFront: !this.state.showFront });
 	};
 	render() {
+		if (!isLoaded(this.props.cards)) {
+			return <div>Loading...</div>;
+		}
+
+		if (isEmpty(this.props.cards)) {
+			return <div>Page not found!</div>;
+		}
+
 		const card =
 			this.props.cards[this.state.index][
 				this.state.showFront ? 'front' : 'back'
 			];
 		return (
 			<div>
-				<h2>Card Viewer</h2>
+				<h2>{this.props.name}</h2>
 				Card {this.state.index + 1}/{this.props.cards.length}
 				<hr />
 				<div onClick={this.flip} className='card'>
@@ -53,10 +64,24 @@ class CardViewer extends React.Component {
 					Previous Card
 				</button>
 				<hr />
-				<Link to='/editor'>Switch mode to edit the cards</Link>
+				<Link to='/editor'>Go to Home</Link>
 			</div>
 		);
 	}
 }
 
-export default CardViewer;
+const mapStateToProps = (state, props) => {
+	const deck = state.firebase.data[props.match.params.deckId];
+	const name = deck && deck.name;
+	const cards = deck && deck.cards;
+	return { cards: cards, name: name };
+};
+
+export default compose(
+	withRouter,
+	firebaseConnect((props) => {
+		const deckId = props.match.params.deckId;
+		return [{ path: `/decks/${deckId}`, storeAs: deckId }];
+	}),
+	connect(mapStateToProps)
+)(CardViewer);

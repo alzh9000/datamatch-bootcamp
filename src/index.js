@@ -4,18 +4,16 @@ import App from './App';
 
 import { BrowserRouter } from 'react-router-dom';
 
-import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import firebase from 'firebase/compat/app';
-import 'firebase/auth';
-// import 'firebase/firestore' // <- needed if using firestore
-// import 'firebase/functions' // <- needed if using httpsCallable
-import { createStore, combineReducers, compose } from 'redux';
+import 'firebase/compat/database';
+import 'firebase/compat/auth';
+import 'firebase/functions';
+import { createStore, combineReducers } from 'redux';
 import {
-	ReactReduxFirebaseProvider,
-	firebaseReducer,
+  ReactReduxFirebaseProvider,
+  firebaseReducer,
 } from 'react-redux-firebase';
-// import { createFirestoreInstance, firestoreReducer } from 'redux-firestore' // <- needed if using firestore
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 const firebaseConfig = {
