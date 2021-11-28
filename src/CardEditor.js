@@ -1,28 +1,47 @@
 import React from 'react';
 import './CardViewer.css';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { firebaseConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
 
 class CardEditor extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { front: '', back: '' };
+		this.state = {
+			cards: [
+				{ front: 'front1', back: 'back1' },
+				{ front: 'front2', back: 'back2' },
+			],
+			front: '',
+			back: '',
+			name: '',
+		};
 	}
 	addCard = () => {
 		if (!this.state.front.trim() || !this.state.back.trim()) {
 			alert('We disallow cards with empty fronts or empty backs.');
 			return;
 		}
-		this.props.addCard(this.state);
-		this.setState({ front: '', back: '' });
+		const newCard = { front: this.state.front, back: this.state.back };
+		const cards = this.state.cards.slice().concat(newCard);
+		this.setState({ cards, front: '', back: '' });
 	};
 	handleChange = (event) => {
 		this.setState({ [event.target.name]: event.target.value });
 	};
+	createDeck = () => {
+		const deckId = this.props.firebase.push('/decks').key;
+		const newDeck = { cards: this.state.cards, name: this.state.name };
+		const onComplete = () => this.props.history.push(`/viewer/${deckId}`);
+		this.props.firebase.update(`/decks/${deckId}`, newDeck, onComplete);
+	};
 	deleteCard = (index) => {
-		this.props.deleteCard(index);
+		const cards = this.state.cards.slice();
+		cards.splice(index, 1);
+		this.setState({ cards });
 	};
 	render() {
-		const cards = this.props.cards.map((card, index) => {
+		const cards = this.state.cards.map((card, index) => {
 			return (
 				<tr key={index}>
 					<td>{card.front}</td>
@@ -36,6 +55,16 @@ class CardEditor extends React.Component {
 		return (
 			<div>
 				<h2>Card Editor</h2>
+				<div>
+					Deck name:{' '}
+					<input
+						name='name'
+						onChange={this.handleChange}
+						placeholder='Name of deck'
+						value={this.state.name}
+					/>
+				</div>
+				<br />
 				<table>
 					<thead>
 						<tr>
@@ -61,10 +90,19 @@ class CardEditor extends React.Component {
 				/>
 				<button onClick={this.addCard}>Add card</button>
 				<hr />
-				<Link to='/viewer'>Switch mode to view the cards</Link>
+				<div>
+					<button
+						disabled={!this.state.name.trim() || this.state.cards.length === 0}
+						onClick={this.createDeck}
+					>
+						Create deck
+					</button>
+				</div>
+				<br />
+				<Link to='/'>Go to Home</Link>
 			</div>
 		);
 	}
 }
 
-export default CardEditor;
+export default compose(firebaseConnect(), withRouter)(CardEditor);
